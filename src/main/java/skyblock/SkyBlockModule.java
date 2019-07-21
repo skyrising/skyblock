@@ -1,15 +1,8 @@
 package skyblock;
 
-import net.fabricmc.api.ModInitializer;
-import quickcarpet.QuickCarpet;
 import quickcarpet.module.QuickCarpetModule;
 
-public class SkyBlockModule implements ModInitializer, QuickCarpetModule {
-    @Override
-    public void onInitialize() {
-        QuickCarpet.getInstance().registerModule(this);
-    }
-
+public class SkyBlockModule implements QuickCarpetModule {
     @Override
     public String getName() {
         return Build.NAME;
