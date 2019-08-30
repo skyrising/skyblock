@@ -9,11 +9,14 @@ public class SkyBlockLoader implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            Class<?> qcModuleClass = Class.forName("quickcarpet.module.QuickCarpetModule");
-            Method register = QuickCarpet.class.getDeclaredMethod("registerModule", qcModuleClass);
-            register.invoke(QuickCarpet.getInstance(), new SkyBlockModule());
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("QuickCarpet module system not found. Requires at least QuickCarpet version 1.12.0");
+            Class.forName("quickcarpet.module.QuickCarpetModule");
+            QuickCarpet.getInstance().registerModule(new SkyBlockModule());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("QuickCarpet module system not found. Requires at least QuickCarpet version 1.12.0", e);
+        } catch (LinkageError e) {
+            throw new IllegalStateException("Incompatible QuickCarpet version (" + quickcarpet.Build.VERSION + ")", e);
+        } catch (Throwable e) {
+            throw new IllegalStateException("Error initializing SkyBlock", e);
         }
     }
 }

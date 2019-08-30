@@ -1,0 +1,8 @@
+{
+  "generator.skyblock": "SkyBlock",
+  "skyblock.rule.betterPotions.description": "Better potions",
+  "skyblock.rule.wanderingTraderSkyblockTrades.description": "Add trades to the wandering trader for Skyblock",
+  "skyblock.rule.blockLightDetector.description": "Block light detector.",
+  "skyblock.rule.blockLightDetector.extra": "Right click a daylight sensor with a light source to toggle.\nNo visual indicator besides redstone power is given.",
+  "skyblock.rule.endPortalFix.description": "Fixes exit end portal generating too low"
+}
