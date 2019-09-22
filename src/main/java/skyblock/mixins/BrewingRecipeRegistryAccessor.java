@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import org.spongepowered.asm.mixin.Mixin;

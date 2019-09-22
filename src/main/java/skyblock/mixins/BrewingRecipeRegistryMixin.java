@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import skyblock.SkyBlockRegistry;
+import skyblock.utils.SkyBlockRegistry;
 import skyblock.SkyBlockSettings;
 
 @Mixin(BrewingRecipeRegistry.class)

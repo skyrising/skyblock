@@ -1,4 +1,4 @@
-package skyblock;
+package skyblock.utils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -31,8 +31,8 @@ import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.dimension.TheEndDimension;
 import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.level.LevelGeneratorType;
-import skyblock.mixin.ProtoChunkAccessor;
-import skyblock.mixin.StructurePieceAccessor;
+import skyblock.mixins.ProtoChunkAccessor;
+import skyblock.mixins.StructurePieceAccessor;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -197,7 +197,8 @@ public class SkyBlockUtils {
         }
     }
 
-    public static class SkyBlockOverworldGenerator extends OverworldChunkGenerator {
+    public static class SkyBlockOverworldGenerator extends OverworldChunkGenerator
+    {
 
         public SkyBlockOverworldGenerator(IWorld world, BiomeSource biomeSource, OverworldChunkGeneratorConfig config) {
             super(world, biomeSource, config);
@@ -210,7 +211,8 @@ public class SkyBlockUtils {
         }
     }
 
-    public static class SkyBlockCavesGenerator extends CavesChunkGenerator {
+    public static class SkyBlockCavesGenerator extends CavesChunkGenerator
+    {
         public SkyBlockCavesGenerator(World world, BiomeSource biomeSource, CavesChunkGeneratorConfig config) {
             super(world, biomeSource, config);
         }
@@ -222,7 +224,8 @@ public class SkyBlockUtils {
         }
     }
 
-    public static class SkyBlockFloatingIslandsGenerator extends FloatingIslandsChunkGenerator {
+    public static class SkyBlockFloatingIslandsGenerator extends FloatingIslandsChunkGenerator
+    {
         public SkyBlockFloatingIslandsGenerator(World world, BiomeSource biomeSource, FloatingIslandsChunkGeneratorConfig config) {
             super(world, biomeSource, config);
         }

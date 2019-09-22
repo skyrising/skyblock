@@ -1,8 +1,9 @@
 {
   "required": true,
-  "package": "skyblock.mixin",
+  "package": "skyblock.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MinecraftServer_noopMixin",
     "BrewingRecipeRegistryAccessor",
     "BrewingRecipeRegistryMixin",
     "DaylightDetectorBlockEntityMixin",
@@ -17,9 +18,9 @@
     "TheNetherDimensionMixin"
   ],
   "client": [
+    "MinecraftClient_noopMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "refmap": "skyblock-refmap.json"
+  }
 }

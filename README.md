@@ -1,6 +1,6 @@
 # SkyBlock
 
-SkyBlock is a module for [QuickCarpet](https://github.com/DeadlyMC/QuickCarpet114)
+SkyBlock is a module for [fabric-carpet](https://github.com/gnembon/fabric-carpet)
 
 ## Features
 - Generator for empty worlds, keeping biomes, structure bounding bounding boxes and end portals
@@ -10,9 +10,9 @@ SkyBlock is a module for [QuickCarpet](https://github.com/DeadlyMC/QuickCarpet11
 
 ## Installation
 - Install [Fabric](https://fabricmc.net/use)
-- Download [QuickCarpet](https://github.com/DeadlyMC/QuickCarpet114/releases)
+- Download [fabric-carpet](https://github.com/gnembon/fabric-carpet/releases)
 - Download [SkyBlock](https://github.com/skyrising/skyblock/releases)
-- Place QuickCarpet and SkyBlock into `<minecraft-directory>/mods/`
+- Place fabric-carpet and SkyBlock into `<minecraft-directory>/mods/`
 
 ## Usage (World Generation)
 ### Singleplayer

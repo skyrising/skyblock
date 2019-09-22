@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.util.math.BlockPos;

@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -7,7 +7,7 @@ import net.minecraft.potion.Potions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import static skyblock.SkyBlockRegistry.*;
+import static skyblock.utils.SkyBlockRegistry.*;
 
 @Mixin(Potions.class)
 public abstract class PotionsMixin
