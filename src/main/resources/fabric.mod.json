@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "skyblock",
   "version": "${version}",
-
   "name": "SkyBlock",
   "description": "Empty world generation and new ways to get certain items",
   "authors": [
@@ -11,15 +10,14 @@
   ],
   "contact": {
     "homepage": "https://discord.gg/scicraft",
-    "sources": ""
+    "sources": "https://github.com/skyrising/skyblock",
+    "issues": "https://github.com/skyrising/skyblock/issues"
   },
-
-  "license": "CC0-1.0",
-  "icon": "assets/skyblock/icon.png",
-
+  "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "main": [
+      "skyblock.SkyBlockExtension"
     ]
   },
   "mixins": [
@@ -27,10 +25,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabric-resource-loader-v0": "*",
     "carpet": "*"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }

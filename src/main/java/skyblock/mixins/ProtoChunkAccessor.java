@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ProtoChunk;

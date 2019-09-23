@@ -31,8 +31,8 @@ import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.dimension.TheEndDimension;
 import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.level.LevelGeneratorType;
-import skyblock.mixin.ProtoChunkAccessor;
-import skyblock.mixin.StructurePieceAccessor;
+import skyblock.mixins.ProtoChunkAccessor;
+import skyblock.mixins.StructurePieceAccessor;
 
 import java.util.EnumSet;
 import java.util.Map;

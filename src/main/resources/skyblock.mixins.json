@@ -3,7 +3,6 @@
   "package": "skyblock.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MinecraftServer_noopMixin",
     "BrewingRecipeRegistryAccessor",
     "BrewingRecipeRegistryMixin",
     "DaylightDetectorBlockEntityMixin",
@@ -16,9 +15,6 @@
     "StructurePieceAccessor",
     "TheEndDimensionMixin",
     "TheNetherDimensionMixin"
-  ],
-  "client": [
-    "MinecraftClient_noopMixin"
   ],
   "injectors": {
     "defaultRequire": 1

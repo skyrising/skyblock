@@ -1,4 +1,4 @@
-package skyblock.mixin;
+package skyblock.mixins;
 
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.util.BlockMirror;

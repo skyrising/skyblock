@@ -1,5 +1,7 @@
+import java.text.SimpleDateFormat
+
 plugins {
-	id 'fabric-loom' version '0.2.3-SNAPSHOT'
+	id 'fabric-loom' version '0.2.4-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,6 +13,13 @@ repositories {
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
+
+def buildDate = new Date()
+if (project.mod_version.endsWith('-dev')) {
+	def df = new SimpleDateFormat(".yyyyMMdd.HHmmss")
+	df.setTimeZone(TimeZone.getTimeZone("UTC"))
+	project.mod_version += df.format(buildDate)
+}
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -26,21 +35,73 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 	modCompile "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	// modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
+	include "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
 
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+	// javax.annotation.Nullable/Nonnull
+	compileOnly "com.google.code.findbugs:jsr305:3.0.1"
 }
 
+static def gitCommit() {
+	def commit = ""
+	def proc = "git rev-parse HEAD".execute()
+	proc.in.eachLine { line -> commit = line }
+	proc.err.eachLine { line -> println line }
+	proc.waitFor()
+	commit
+}
+
+static def gitBranch() {
+	def branch = ""
+	def proc = "git rev-parse --abbrev-ref HEAD".execute()
+	proc.in.eachLine { line -> branch = line }
+	proc.err.eachLine { line -> println line }
+	proc.waitFor()
+	branch
+}
+
+static def gitStatus() {
+	def exitCode = "git diff --quiet".execute().waitFor() // not added
+	if (exitCode == 0) {
+		exitCode = "git diff --cached --quiet".execute().waitFor() // not committed
+	}
+	exitCode == 0
+}
+
+task generateJava(type: Copy) {
+	def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+	df.setTimeZone(TimeZone.getTimeZone("UTC"))
+	def templateContext = [
+			version: project.version,
+			timestamp: df.format(buildDate),
+			branch: gitBranch(),
+			commit: gitCommit(),
+			working_dir_clean: gitStatus(),
+			minecraft_version: project.minecraft_version,
+			yarn_mappings: project.yarn_mappings
+	]
+	inputs.properties templateContext // for gradle up-to-date check
+	from 'src/template/java'
+	into "$buildDir/generated/java"
+	expand templateContext
+}
+
+sourceSets.main.java.srcDir "$buildDir/generated/java"
+compileJava.dependsOn generateJava
+
 processResources {
+	// this will ensure that this task is re-run when there's a change
 	inputs.property "version", project.version
 
+	// replace stuff in fabric.mod.json, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include "fabric.mod.json"
+
+		// add mod metadata
 		expand "version": project.version
 	}
 
+	// copy everything else, thats not the mcmod.info
 	from(sourceSets.main.resources.srcDirs) {
 		exclude "fabric.mod.json"
 	}
