@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -9,7 +9,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Tickable;
 import org.spongepowered.asm.mixin.Mixin;
-import skyblock.interfaces.IDaylightDetectorBlockEntity;
+import skyblock.IDaylightDetectorBlockEntity;
 import skyblock.SkyBlockSettings;
 
 @Mixin(DaylightDetectorBlockEntity.class)

@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import skyblock.SkyBlockExtension;
 import net.minecraft.server.MinecraftServer;

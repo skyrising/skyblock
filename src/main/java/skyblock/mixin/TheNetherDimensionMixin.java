@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import skyblock.utils.SkyBlockUtils;
+import skyblock.SkyBlockUtils;
 
 @Mixin(TheNetherDimension.class)
 public abstract class TheNetherDimensionMixin extends Dimension

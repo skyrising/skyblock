@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import skyblock.interfaces.IDaylightDetectorBlockEntity;
+import skyblock.IDaylightDetectorBlockEntity;
 import skyblock.SkyBlockSettings;
 
 import static net.minecraft.block.DaylightDetectorBlock.POWER;

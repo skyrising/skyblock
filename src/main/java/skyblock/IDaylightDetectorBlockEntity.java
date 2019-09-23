@@ -1,4 +1,4 @@
-package skyblock.interfaces;
+package skyblock;
 
 
 public interface IDaylightDetectorBlockEntity

@@ -1,8 +1,8 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.world.level.LevelGeneratorType;
 import org.spongepowered.asm.mixin.Mixin;
-import skyblock.utils.SkyBlockUtils;
+import skyblock.SkyBlockUtils;
 
 @Mixin(LevelGeneratorType.class)
 public class LevelGeneratorTypeMixin {

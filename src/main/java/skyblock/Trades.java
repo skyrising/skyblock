@@ -1,4 +1,4 @@
-package skyblock.utils;
+package skyblock;
 
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.village.TradeOffers;
+import skyblock.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
