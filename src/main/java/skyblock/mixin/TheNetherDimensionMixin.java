@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skyblock.SkyBlockUtils;
 
 @Mixin(TheNetherDimension.class)
-public abstract class TheNetherDimensionMixin extends Dimension
-{
+public abstract class TheNetherDimensionMixin extends Dimension {
 
     public TheNetherDimensionMixin(World world, DimensionType type) {
         super(world, type);

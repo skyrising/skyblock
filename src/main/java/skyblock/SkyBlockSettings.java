@@ -16,8 +16,7 @@ public class SkyBlockSettings
     @Rule(desc = "Better potions", category = {EXPERIMENTAL, FEATURE}, validate = BetterPotionListener.class)
     public static boolean betterPotions = false;
     
-    public static class BetterPotionListener extends Validator<Boolean>
-    {
+    public static class BetterPotionListener extends Validator<Boolean> {
         @Override
         public Boolean validate(ServerCommandSource source, ParsedRule<Boolean> currentRule, Boolean newValue, String string)
         {
@@ -32,15 +31,14 @@ public class SkyBlockSettings
     @Rule(desc = "Add trades to the wandering trader for Skyblock", category = {EXPERIMENTAL, FEATURE}, validate = WanderingTraderSkyblockTradesChange.class)
     public static boolean wanderingTraderSkyblockTrades = false;
     
-    public static class WanderingTraderSkyblockTradesChange extends Validator<Boolean>
-    {
+    public static class WanderingTraderSkyblockTradesChange extends Validator<Boolean> {
         @Override
-        public Boolean validate(ServerCommandSource source, ParsedRule<Boolean> currentRule, Boolean newValue, String string)
-        {
-            if (newValue)
+        public Boolean validate(ServerCommandSource source, ParsedRule<Boolean> currentRule, Boolean newValue, String string) {
+            if (newValue) {
                 Trades.mergeWanderingTraderOffers(Trades.getSkyblockWanderingTraderOffers());
-            else
+            } else {
                 Trades.mergeWanderingTraderOffers(new Int2ObjectOpenHashMap<>());
+            }
             return newValue;
         }
     }

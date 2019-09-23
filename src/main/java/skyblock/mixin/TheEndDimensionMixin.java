@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skyblock.SkyBlockUtils;
 
 @Mixin(TheEndDimension.class)
-public abstract class TheEndDimensionMixin extends Dimension
-{
+public abstract class TheEndDimensionMixin extends Dimension {
 
     public TheEndDimensionMixin(World world, DimensionType type) {
         super(world, type);
