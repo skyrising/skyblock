@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.server.ServerTask;
 import net.minecraft.server.command.ServerCommandSource;
-import skyblock.mixins.BrewingRecipeRegistryAccessor;
+import skyblock.mixin.BrewingRecipeRegistryAccessor;
 
 import static carpet.settings.RuleCategory.*;
 

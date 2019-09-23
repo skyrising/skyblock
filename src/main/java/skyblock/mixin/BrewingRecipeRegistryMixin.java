@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

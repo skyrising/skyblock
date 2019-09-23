@@ -1,4 +1,4 @@
-package skyblock.mixins;
+package skyblock.mixin;
 
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
