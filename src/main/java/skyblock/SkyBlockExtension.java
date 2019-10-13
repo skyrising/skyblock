@@ -3,11 +3,7 @@ package skyblock;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import carpet.settings.SettingsManager;
-import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 public class SkyBlockExtension implements CarpetExtension, ModInitializer
 {
