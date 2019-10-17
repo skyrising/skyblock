@@ -13,7 +13,9 @@ import static carpet.settings.RuleCategory.*;
 
 public class SkyBlockSettings
 {
-    @Rule(desc = "Better potions", category = {EXPERIMENTAL, FEATURE}, validate = BetterPotionListener.class)
+    public static final String SKYBLOCK = "skyblock";
+    
+    @Rule(desc = "Better potions", category = {SKYBLOCK, EXPERIMENTAL, FEATURE}, validate = BetterPotionListener.class)
     public static boolean betterPotions = false;
     
     public static class BetterPotionListener extends Validator<Boolean> {
@@ -28,7 +30,7 @@ public class SkyBlockSettings
         }
     }
     
-    @Rule(desc = "Add trades to the wandering trader for Skyblock", category = {EXPERIMENTAL, FEATURE}, validate = WanderingTraderSkyblockTradesChange.class)
+    @Rule(desc = "Add trades to the wandering trader for Skyblock", category = {SKYBLOCK, EXPERIMENTAL, FEATURE}, validate = WanderingTraderSkyblockTradesChange.class)
     public static boolean wanderingTraderSkyblockTrades = false;
     
     public static class WanderingTraderSkyblockTradesChange extends Validator<Boolean> {
@@ -49,11 +51,11 @@ public class SkyBlockSettings
             "Right click a daylight sensor with a light source to toggle.",
             "No visual indicator besides redstone power is given."
             },
-            category = {FEATURE, EXPERIMENTAL}
+            category = {SKYBLOCK, FEATURE, EXPERIMENTAL}
     )
     public static boolean blockLightDetector = false;
     
-    @Rule(desc = "Fixes exit end portal generating too low", extra = "Fixes MC-93185", category = BUGFIX)
+    @Rule(desc = "Fixes exit end portal generating too low", extra = "Fixes MC-93185", category = {SKYBLOCK, BUGFIX})
     public static boolean endPortalFix = true;
     
 }
