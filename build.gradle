@@ -33,6 +33,9 @@ repositories {
 		name = 'skyrising'
 		url = 'https://maven.skyrising.xyz/'
 	}
+	maven {
+		url 'https://masa.dy.fi/maven'
+	}
 }
 
 dependencies {
