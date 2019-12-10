@@ -100,13 +100,13 @@ public abstract class DaylightDetectorBlockMixin extends BlockWithEntity
         
     }
     
-    @Redirect(method = "activate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"))
+    @Redirect(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"))
     boolean doNothing(World world, BlockPos blockPos_1, BlockState blockState_1, int int_1)
     {
         return false;
     }
     
-    @Inject(method = "activate", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DaylightDetectorBlock;updateState(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DaylightDetectorBlock;updateState(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void activate0(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand arg4, BlockHitResult arg5, CallbackInfoReturnable<Boolean> cir, BlockState blockState_2)
     {
         if (SkyBlockSettings.blockLightDetector)
@@ -116,7 +116,7 @@ public abstract class DaylightDetectorBlockMixin extends BlockWithEntity
             {
                 if (TOGGLE_BLOCKLIGHT_ITEMS == null)
                     TOGGLE_BLOCKLIGHT_ITEMS = Ingredient.ofItems(Items.GLOWSTONE, Items.TORCH, Items.REDSTONE_LAMP, Items.BEACON, Items.JACK_O_LANTERN, Items.CAMPFIRE, Items.LANTERN, Items.SEA_LANTERN, Items.REDSTONE_TORCH, Items.END_ROD);
-                if (TOGGLE_BLOCKLIGHT_ITEMS.method_8093(itemStack_1))
+                if (TOGGLE_BLOCKLIGHT_ITEMS.test(itemStack_1))
                 {
                     blockState_2 = blockState_2.cycle(INVERTED);
                     BlockEntity blockEntity = world_1.getBlockEntity(blockPos_1);
@@ -132,7 +132,7 @@ public abstract class DaylightDetectorBlockMixin extends BlockWithEntity
         updateState(blockState_2, world_1, blockPos_1);
     }
     
-    @Redirect(method = "activate", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DaylightDetectorBlock;updateState(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V"))
+    @Redirect(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DaylightDetectorBlock;updateState(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V"))
     private void doNothing(BlockState blockState_1, World world_1, BlockPos blockPos_1)
     {
     }

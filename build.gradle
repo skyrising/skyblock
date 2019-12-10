@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
 plugins {
-	id 'fabric-loom' version '0.2.4-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -34,7 +34,8 @@ repositories {
 		url = 'https://maven.skyrising.xyz/'
 	}
 	maven {
-		url 'https://masa.dy.fi/maven'
+		name = 'masa'
+		url = 'https://masa.dy.fi/maven/'
 	}
 }
 

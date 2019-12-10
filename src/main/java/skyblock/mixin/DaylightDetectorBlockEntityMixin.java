@@ -1,5 +1,6 @@
 package skyblock.mixin;
 
+import fi.dy.masa.malilib.util.Constants;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.DaylightDetectorBlockEntity;
@@ -9,6 +10,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Tickable;
 import org.spongepowered.asm.mixin.Mixin;
+import quickcarpet.helper.NBTHelper;
 import skyblock.IDaylightDetectorBlockEntity;
 import skyblock.SkyBlockSettings;
 
@@ -37,7 +39,7 @@ public abstract class DaylightDetectorBlockEntityMixin extends BlockEntity imple
     {
         super.fromTag(compoundTag_1);
         
-        if (SkyBlockSettings.blockLightDetector && compoundTag_1.containsKey("blockLightMode", 3))
+        if (SkyBlockSettings.blockLightDetector && compoundTag_1.contains("blockLightMode", NBTHelper.TAG_INT))
         {
             this.detectsBlockLight = compoundTag_1.getInt("blockLightMode") > 0;
         }

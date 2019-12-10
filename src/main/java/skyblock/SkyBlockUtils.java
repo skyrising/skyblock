@@ -34,6 +34,7 @@ import net.minecraft.world.level.LevelGeneratorType;
 import skyblock.mixin.ProtoChunkAccessor;
 import skyblock.mixin.StructurePieceAccessor;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
@@ -67,9 +68,7 @@ public class SkyBlockUtils {
 
     private static void deleteBlocks(ProtoChunk chunk, IWorld world) {
         ChunkSection[] sections = chunk.getSectionArray();
-        for (int i = 0; i < sections.length; i++) {
-            sections[i] = WorldChunk.EMPTY_SECTION;
-        }
+        Arrays.fill(sections, WorldChunk.EMPTY_SECTION);
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
             chunk.removeBlockEntity(bePos);
         }
