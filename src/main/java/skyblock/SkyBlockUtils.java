@@ -34,6 +34,7 @@ import net.minecraft.world.level.LevelGeneratorType;
 import skyblock.mixin.ProtoChunkAccessor;
 import skyblock.mixin.StructurePieceAccessor;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
@@ -46,7 +47,7 @@ public class SkyBlockUtils {
         ChunkGeneratorType<OverworldChunkGeneratorConfig, OverworldChunkGenerator> chunkGeneratorType = ChunkGeneratorType.SURFACE;
         BiomeSourceType<VanillaLayeredBiomeSourceConfig, VanillaLayeredBiomeSource> biomeSourceType = BiomeSourceType.VANILLA_LAYERED;
         OverworldChunkGeneratorConfig chunkGeneratorConfig = chunkGeneratorType.createSettings();
-        VanillaLayeredBiomeSourceConfig biomeSourceConfig = (biomeSourceType.getConfig()).setLevelProperties(world.getLevelProperties()).setGeneratorSettings(chunkGeneratorConfig);
+        VanillaLayeredBiomeSourceConfig biomeSourceConfig = biomeSourceType.getConfig(world.getLevelProperties()).setGeneratorSettings(chunkGeneratorConfig);
         return new SkyBlockOverworldGenerator(world, biomeSourceType.applyConfig(biomeSourceConfig), chunkGeneratorConfig);
     }
 
@@ -54,7 +55,7 @@ public class SkyBlockUtils {
         CavesChunkGeneratorConfig config = ChunkGeneratorType.CAVES.createSettings();
         config.setDefaultBlock(Blocks.NETHERRACK.getDefaultState());
         config.setDefaultFluid(Blocks.LAVA.getDefaultState());
-        return new SkyBlockCavesGenerator(world, BiomeSourceType.FIXED.applyConfig((BiomeSourceType.FIXED.getConfig()).setBiome(Biomes.NETHER)), config);
+        return new SkyBlockCavesGenerator(world, BiomeSourceType.FIXED.applyConfig((BiomeSourceType.FIXED.getConfig(world.getLevelProperties())).setBiome(Biomes.NETHER)), config);
     }
 
     public static ChunkGenerator<? extends ChunkGeneratorConfig> createEndChunkGenerator(World world) {
@@ -62,14 +63,12 @@ public class SkyBlockUtils {
         config.setDefaultBlock(Blocks.END_STONE.getDefaultState());
         config.setDefaultFluid(Blocks.AIR.getDefaultState());
         config.withCenter(TheEndDimension.SPAWN_POINT);
-        return new SkyBlockFloatingIslandsGenerator(world, BiomeSourceType.THE_END.applyConfig((BiomeSourceType.THE_END.getConfig()).method_9205(world.getSeed())), config);
+        return new SkyBlockFloatingIslandsGenerator(world, BiomeSourceType.THE_END.applyConfig((BiomeSourceType.THE_END.getConfig(world.getLevelProperties()))), config);
     }
 
     private static void deleteBlocks(ProtoChunk chunk, IWorld world) {
         ChunkSection[] sections = chunk.getSectionArray();
-        for (int i = 0; i < sections.length; i++) {
-            sections[i] = WorldChunk.EMPTY_SECTION;
-        }
+        Arrays.fill(sections, WorldChunk.EMPTY_SECTION);
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
             chunk.removeBlockEntity(bePos);
         }

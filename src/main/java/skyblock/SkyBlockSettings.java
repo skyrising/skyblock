@@ -22,7 +22,7 @@ public class SkyBlockSettings
         @Override
         public Boolean validate(ServerCommandSource source, ParsedRule<Boolean> currentRule, Boolean newValue, String string)
         {
-            source.getMinecraftServer().method_18858(new ServerTask(source.getMinecraftServer().getTicks(), () -> {
+            source.getMinecraftServer().send(new ServerTask(source.getMinecraftServer().getTicks(), () -> {
                 BrewingRecipeRegistryAccessor.getPotionRecipeList().clear();
                 BrewingRecipeRegistry.registerDefaults();
             }));

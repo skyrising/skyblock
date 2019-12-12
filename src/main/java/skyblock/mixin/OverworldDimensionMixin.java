@@ -16,10 +16,11 @@ import skyblock.SkyBlockUtils;
 @Mixin(OverworldDimension.class)
 public abstract class OverworldDimensionMixin extends Dimension {
     public OverworldDimensionMixin(World world_1, DimensionType dimensionType_1) {
-        super(world_1, dimensionType_1);
+        super(world_1, dimensionType_1, 0);
+        throw new AbstractMethodError();
     }
 
-    @Inject(method = "createChunkGenerator()Lnet/minecraft/world/gen/chunk/ChunkGenerator;", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "createChunkGenerator", at = @At("HEAD"), cancellable = true)
     private void createSkyBlockGenerator(CallbackInfoReturnable<ChunkGenerator<? extends ChunkGeneratorConfig>> cir) {
         LevelGeneratorType type = this.world.getLevelProperties().getGeneratorType();
         if (type == SkyBlockUtils.LEVEL_GENERATOR_TYPE) {

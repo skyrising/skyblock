@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
 plugins {
-	id 'fabric-loom' version '0.2.4-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -21,7 +21,13 @@ if (project.mod_version.endsWith('-dev')) {
 	project.mod_version += df.format(buildDate)
 }
 
-archivesBaseName = project.archives_base_name
+
+def branch = gitBranch()
+if (branch != "master") {
+	project.mod_version += "+" + branch;
+}
+
+archivesBaseName = project.name
 version = project.mod_version
 group = project.maven_group
 

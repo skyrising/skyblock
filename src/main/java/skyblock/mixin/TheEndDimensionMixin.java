@@ -17,10 +17,11 @@ import skyblock.SkyBlockUtils;
 public abstract class TheEndDimensionMixin extends Dimension {
 
     public TheEndDimensionMixin(World world, DimensionType type) {
-        super(world, type);
+        super(world, type, 0);
+        throw new AbstractMethodError();
     }
 
-    @Inject(method = "createChunkGenerator()Lnet/minecraft/world/gen/chunk/ChunkGenerator;", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "createChunkGenerator", at = @At("HEAD"), cancellable = true)
     private void createSkyBlockGenerator(CallbackInfoReturnable<ChunkGenerator<? extends ChunkGeneratorConfig>> cir) {
         LevelGeneratorType type = this.world.getLevelProperties().getGeneratorType();
         if (type == SkyBlockUtils.LEVEL_GENERATOR_TYPE) {

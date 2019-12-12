@@ -37,7 +37,7 @@ public abstract class DaylightDetectorBlockEntityMixin extends BlockEntity imple
     {
         super.fromTag(compoundTag_1);
         
-        if (SkyBlockSettings.blockLightDetector && compoundTag_1.containsKey("blockLightMode", 3))
+        if (SkyBlockSettings.blockLightDetector && compoundTag_1.contains("blockLightMode", 3))
         {
             this.detectsBlockLight = compoundTag_1.getInt("blockLightMode") > 0;
         }
