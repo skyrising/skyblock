@@ -30,4 +30,10 @@ public class SkyBlockExtension implements CarpetExtension, ModInitializer
         // this will ensure that our settings are loaded properly when world loads
         return mySettingManager;
     }
+    
+    @Override
+    public String version()
+    {
+        return "carpet-skyblock 1.1.0";
+    }
 }
