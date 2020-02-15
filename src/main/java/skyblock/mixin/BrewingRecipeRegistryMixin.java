@@ -69,7 +69,7 @@ public abstract class BrewingRecipeRegistryMixin
             )
         {
             PotionUtil.setCustomPotionEffects(itemStack_1, potion.getEffects());
-            itemStack_1.setCustomName(new TranslatableText(potion.getName(itemStack_1.getItem().getTranslationKey() + ".effect.")));
+            itemStack_1.setCustomName(new TranslatableText(potion.finishTranslationKey(itemStack_1.getItem().getTranslationKey() + ".effect.")));
             itemStack_1.getTag().putInt("CustomPotionColor", PotionUtil.getColor(potion));
             return itemStack_1;
         }
