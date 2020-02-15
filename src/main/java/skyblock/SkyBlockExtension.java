@@ -34,6 +34,6 @@ public class SkyBlockExtension implements CarpetExtension, ModInitializer
     @Override
     public String version()
     {
-        return "carpet-skyblock 1.1.0";
+        return "carpet-skyblock 1.1.1";
     }
 }
