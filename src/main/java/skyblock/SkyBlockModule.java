@@ -1,5 +1,7 @@
 package skyblock;
 
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import quickcarpet.module.QuickCarpetModule;
 
 public class SkyBlockModule implements QuickCarpetModule {
@@ -21,5 +23,11 @@ public class SkyBlockModule implements QuickCarpetModule {
     @Override
     public Class<?> getSettingsClass() {
         return SkyBlockSettings.class;
+    }
+
+    @Override
+    public boolean isIgnoredForRegistrySync(Identifier registry, Identifier entry) {
+        if (!Registry.POTION_KEY.getValue().equals(registry)) return false;
+        return entry.toString().startsWith("minecraft:super_");
     }
 }

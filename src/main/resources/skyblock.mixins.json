@@ -5,16 +5,13 @@
   "mixins": [
     "BrewingRecipeRegistryAccessor",
     "BrewingRecipeRegistryMixin",
+    "ChunkStatusMixin",
     "DaylightDetectorBlockEntityMixin",
     "DaylightDetectorBlockMixin",
     "EnderDragonFightMixin",
-    "LevelGeneratorTypeMixin",
-    "OverworldDimensionMixin",
     "PotionsMixin",
     "ProtoChunkAccessor",
-    "StructurePieceAccessor",
-    "TheEndDimensionMixin",
-    "TheNetherDimensionMixin"
+    "StructurePieceAccessor"
   ],
   "client": [
   ],
