@@ -15,11 +15,11 @@ import java.util.List;
 
 public class Trades {
     public static void mergeWanderingTraderOffers(Int2ObjectMap<TradeOffers.Factory[]> custom) {
-        List<TradeOffers.Factory> tier1 = new ArrayList<>(Arrays.asList(SkyBlockRegistry.VANILLA_WANDERING_TRADER_OFFERS.get(1)));
+        List<TradeOffers.Factory> tier1 = new ArrayList<>(Arrays.asList(SkyBlockRegistry.Trades.VANILLA_WANDERING_TRADER_OFFERS.get(1)));
         TradeOffers.Factory[] customTier1 = custom.get(1);
         if (customTier1 != null) tier1.addAll(Arrays.asList(customTier1));
         TradeOffers.WANDERING_TRADER_TRADES.put(1, tier1.toArray(new TradeOffers.Factory[0]));
-        List<TradeOffers.Factory> tier2 = new ArrayList<>(Arrays.asList(SkyBlockRegistry.VANILLA_WANDERING_TRADER_OFFERS.get(2)));
+        List<TradeOffers.Factory> tier2 = new ArrayList<>(Arrays.asList(SkyBlockRegistry.Trades.VANILLA_WANDERING_TRADER_OFFERS.get(2)));
         TradeOffers.Factory[] customTier2 = custom.get(2);
         if (customTier2 != null) tier2.addAll(Arrays.asList(customTier2));
         TradeOffers.WANDERING_TRADER_TRADES.put(2, tier2.toArray(new TradeOffers.Factory[0]));

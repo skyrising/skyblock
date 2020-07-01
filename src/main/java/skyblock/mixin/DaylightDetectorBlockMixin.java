@@ -35,8 +35,6 @@ import static net.minecraft.block.DaylightDetectorBlock.updateState;
 @Mixin(DaylightDetectorBlock.class)
 public abstract class DaylightDetectorBlockMixin extends BlockWithEntity
 {
-    
-    
     @Shadow
     @Final
     public static BooleanProperty INVERTED;

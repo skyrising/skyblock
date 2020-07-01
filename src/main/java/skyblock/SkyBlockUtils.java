@@ -11,26 +11,17 @@ import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructureStart;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.PackedIntegerArray;
+import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.biome.source.BiomeSourceType;
-import net.minecraft.world.biome.source.VanillaLayeredBiomeSource;
-import net.minecraft.world.biome.source.VanillaLayeredBiomeSourceConfig;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
-import net.minecraft.world.dimension.TheEndDimension;
-import net.minecraft.world.gen.chunk.*;
-import net.minecraft.world.level.LevelGeneratorType;
+import net.minecraft.world.gen.feature.StructureFeature;
 import skyblock.mixin.ProtoChunkAccessor;
 import skyblock.mixin.StructurePieceAccessor;
 
@@ -41,32 +32,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class SkyBlockUtils {
-    public static LevelGeneratorType LEVEL_GENERATOR_TYPE;
-
-    public static ChunkGenerator<? extends ChunkGeneratorConfig> createOverworldChunkGenerator(World world) {
-        ChunkGeneratorType<OverworldChunkGeneratorConfig, OverworldChunkGenerator> chunkGeneratorType = ChunkGeneratorType.SURFACE;
-        BiomeSourceType<VanillaLayeredBiomeSourceConfig, VanillaLayeredBiomeSource> biomeSourceType = BiomeSourceType.VANILLA_LAYERED;
-        OverworldChunkGeneratorConfig chunkGeneratorConfig = chunkGeneratorType.createSettings();
-        VanillaLayeredBiomeSourceConfig biomeSourceConfig = biomeSourceType.getConfig(world.getLevelProperties()).setGeneratorSettings(chunkGeneratorConfig);
-        return new SkyBlockOverworldGenerator(world, biomeSourceType.applyConfig(biomeSourceConfig), chunkGeneratorConfig);
-    }
-
-    public static ChunkGenerator<? extends ChunkGeneratorConfig> createNetherChunkGenerator(World world) {
-        CavesChunkGeneratorConfig config = ChunkGeneratorType.CAVES.createSettings();
-        config.setDefaultBlock(Blocks.NETHERRACK.getDefaultState());
-        config.setDefaultFluid(Blocks.LAVA.getDefaultState());
-        return new SkyBlockCavesGenerator(world, BiomeSourceType.FIXED.applyConfig((BiomeSourceType.FIXED.getConfig(world.getLevelProperties())).setBiome(Biomes.NETHER)), config);
-    }
-
-    public static ChunkGenerator<? extends ChunkGeneratorConfig> createEndChunkGenerator(World world) {
-        FloatingIslandsChunkGeneratorConfig config = ChunkGeneratorType.FLOATING_ISLANDS.createSettings();
-        config.setDefaultBlock(Blocks.END_STONE.getDefaultState());
-        config.setDefaultFluid(Blocks.AIR.getDefaultState());
-        config.withCenter(TheEndDimension.SPAWN_POINT);
-        return new SkyBlockFloatingIslandsGenerator(world, BiomeSourceType.THE_END.applyConfig((BiomeSourceType.THE_END.getConfig(world.getLevelProperties()))), config);
-    }
-
-    private static void deleteBlocks(ProtoChunk chunk, IWorld world) {
+    public static void deleteBlocks(ProtoChunk chunk, WorldAccess world) {
         ChunkSection[] sections = chunk.getSectionArray();
         Arrays.fill(sections, WorldChunk.EMPTY_SECTION);
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
@@ -81,11 +47,11 @@ public class SkyBlockUtils {
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
 
-    private static void processStronghold(ProtoChunk chunk, IWorld world) {
-        for (long startPosLong : chunk.getStructureReferences("Stronghold")) {
+    private static void processStronghold(ProtoChunk chunk, WorldAccess world) {
+        for (long startPosLong : chunk.getStructureReferences(StructureFeature.STRONGHOLD)) {
             ChunkPos startPos = new ChunkPos(startPosLong);
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
-            StructureStart stronghold = startChunk.getStructureStart("Stronghold");
+            StructureStart<?> stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
             ChunkPos pos = chunk.getPos();
             if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
                 for (StructurePiece piece : stronghold.getChildren()) {
@@ -185,7 +151,7 @@ public class SkyBlockUtils {
         setBlockEntityInChunk(chunk, spawnerPos, spawnerTag);
     }
 
-    private static void clearChunk(ProtoChunk chunk, IWorld world) {
+    private static void clearChunk(ProtoChunk chunk, WorldAccess world) {
         deleteBlocks(chunk, world);
         // erase entities
         chunk.getEntities().clear();
@@ -193,43 +159,6 @@ public class SkyBlockUtils {
             ((ServerLightingProvider)chunk.getLightingProvider()).light(chunk, true).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static class SkyBlockOverworldGenerator extends OverworldChunkGenerator {
-
-        public SkyBlockOverworldGenerator(IWorld world, BiomeSource biomeSource, OverworldChunkGeneratorConfig config) {
-            super(world, biomeSource, config);
-        }
-
-        @Override
-        public void populateEntities(ChunkRegion region) {
-            ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
-        }
-    }
-
-    public static class SkyBlockCavesGenerator extends CavesChunkGenerator {
-        public SkyBlockCavesGenerator(World world, BiomeSource biomeSource, CavesChunkGeneratorConfig config) {
-            super(world, biomeSource, config);
-        }
-
-        @Override
-        public void populateEntities(ChunkRegion region) {
-            ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
-        }
-    }
-
-    public static class SkyBlockFloatingIslandsGenerator extends FloatingIslandsChunkGenerator {
-        public SkyBlockFloatingIslandsGenerator(World world, BiomeSource biomeSource, FloatingIslandsChunkGeneratorConfig config) {
-            super(world, biomeSource, config);
-        }
-
-        @Override
-        public void populateEntities(ChunkRegion region) {
-            ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
         }
     }
 }
