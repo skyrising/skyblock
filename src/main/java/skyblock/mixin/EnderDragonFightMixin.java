@@ -15,7 +15,7 @@ public class EnderDragonFightMixin {
 
     @Inject(method = "generateEndPortal", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/gen/feature/ConfiguredFeature;generate(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/world/gen/StructureAccessor;Lnet/minecraft/world/gen/chunk/ChunkGenerator;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;)Z",
+            target = "Lnet/minecraft/world/gen/feature/ConfiguredFeature;generate(Lnet/minecraft/world/StructureWorldAccess;Lnet/minecraft/world/gen/chunk/ChunkGenerator;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;)Z",
             shift = At.Shift.BEFORE))
     private void adjustExitPortalLocation(boolean open, CallbackInfo ci) {
         if (SkyBlockSettings.endPortalFix && exitPortalLocation.getY() < 2) exitPortalLocation = exitPortalLocation.up(2 - exitPortalLocation.getY());

@@ -48,7 +48,9 @@ dependencies {
 	// javax.annotation.Nullable/Nonnull
 	compileOnly "com.google.code.findbugs:jsr305:3.0.1"
 
-	modCompile "quickcarpet:quickcarpet:${project.quickcarpet_version}"
+	modImplementation("quickcarpet:quickcarpet:${project.quickcarpet_version}") {
+		exclude module: "modmenu"
+	}
 }
 
 static def gitCommit() {

@@ -2,13 +2,8 @@ package skyblock;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.world.GeneratorType;
 import net.minecraft.potion.Potion;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.world.biome.source.VanillaLayeredBiomeSource;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.ChunkGeneratorType;
-import net.minecraft.world.gen.chunk.SurfaceChunkGenerator;
 
 public interface SkyBlockRegistry {
     final class Trades {
