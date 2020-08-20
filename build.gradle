@@ -24,7 +24,7 @@ if (includeDate) {
 }
 
 if (includeCommit) {
-	project.mod_Version += "+" + gitCommit().substr(0, 7)
+	project.mod_version += "+" + gitCommit().substring(0, 7)
 } else if (includeBranch) {
 	project.mod_version += "+" + branch.replaceAll("[+-]", '_')
 }
