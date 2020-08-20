@@ -42,7 +42,9 @@ public class Trades {
             sell(Items.SUNFLOWER, 5, 10),
             sell(Items.LILAC, 5, 10),
             sell(Items.ROSE_BUSH, 5, 10),
-            sell(Items.PEONY, 5, 10)
+            sell(Items.PEONY, 5, 10),
+            sell(Items.CRIMSON_NYLIUM, 5, 8),
+            sell(Items.WARPED_NYLIUM, 5, 8)
         }));
     }
 }
