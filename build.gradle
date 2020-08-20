@@ -13,20 +13,16 @@ def branch = gitBranch()
 def ci = System.getenv("CI") != null
 def isDev = project.mod_version.endsWith('-dev')
 
-def includeDate = isDev && !ci
-def includeCommit = isDev && ci
-def includeBranch = !includeCommit && branch != "master"
-
-if (includeDate) {
+if (isDev && !ci) {
 	def df = new SimpleDateFormat(".yyyyMMdd.HHmmss")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 	project.mod_version += df.format(buildDate)
 }
-
-if (includeCommit) {
-	project.mod_version += "+" + gitCommit().substring(0, 7)
-} else if (includeBranch) {
+if (branch != "master" && branch != "HEAD") {
 	project.mod_version += "+" + branch.replaceAll("[+-]", '_')
+}
+if (isDev && ci) {
+	project.mod_version += "+" + gitCommit().substring(0, 7)
 }
 
 archivesBaseName = project.name
