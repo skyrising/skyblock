@@ -9,16 +9,24 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 def buildDate = new Date()
-if (project.mod_version.endsWith('-dev')) {
+def branch = gitBranch()
+def ci = System.getenv("CI") != null
+def isDev = project.mod_version.endsWith('-dev')
+
+def includeDate = isDev && !ci
+def includeCommit = isDev && ci
+def includeBranch = !includeCommit && branch != "master"
+
+if (includeDate) {
 	def df = new SimpleDateFormat(".yyyyMMdd.HHmmss")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 	project.mod_version += df.format(buildDate)
 }
 
-
-def branch = gitBranch()
-if (branch != "master") {
-	project.mod_version += "+" + branch;
+if (includeCommit) {
+	project.mod_Version += "+" + gitCommit().substr(0, 7)
+} else if (includeBranch) {
+	project.mod_version += "+" + branch.replaceAll("[+-]", '_')
 }
 
 archivesBaseName = project.name
@@ -54,6 +62,8 @@ dependencies {
 }
 
 static def gitCommit() {
+	def githubCommit = System.getenv("GITHUB_SHA")
+	if (githubCommit != null) return githubCommit
 	def commit = ""
 	def proc = "git rev-parse HEAD".execute()
 	proc.in.eachLine { line -> commit = line }
@@ -63,6 +73,8 @@ static def gitCommit() {
 }
 
 static def gitBranch() {
+	def githubBranch = System.getenv("GITHUB_REF")
+	if (githubBranch != null) return githubBranch.substring(githubBranch.lastIndexOf('/') + 1)
 	def branch = ""
 	def proc = "git rev-parse --abbrev-ref HEAD".execute()
 	proc.in.eachLine { line -> branch = line }
