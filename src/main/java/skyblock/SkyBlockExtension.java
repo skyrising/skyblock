@@ -4,13 +4,21 @@ import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import carpet.settings.SettingsManager;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class SkyBlockExtension implements CarpetExtension, ModInitializer
 {
-    private static SettingsManager mySettingManager = new SettingsManager(Build.VERSION, Build.ID, Build.NAME);
-
+    private static SettingsManager mySettingManager;
+    
+    public static void noop() {}
+    
     public SkyBlockExtension() {
-        CarpetServer.manageExtension(this);
+    }
+
+    static {
+        mySettingManager = new SettingsManager(Build.VERSION, Build.ID, Build.NAME);
+        CarpetServer.manageExtension(new SkyBlockExtension());
     }
 
     @Override
@@ -34,6 +42,12 @@ public class SkyBlockExtension implements CarpetExtension, ModInitializer
     @Override
     public String version()
     {
-        return "carpet-skyblock 1.1.1";
+        return "carpet-skyblock";
+    }
+    
+    public static boolean isIgnoredForRegistrySync(Identifier registry, Identifier entry)
+    {
+        if (!Registry.POTION_KEY.getValue().equals(registry)) return false;
+        return entry.toString().startsWith("minecraft:super_");
     }
 }

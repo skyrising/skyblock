@@ -46,7 +46,9 @@ dependencies {
 	modCompile "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
 
 	modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
-	include "net.fabricmc.fabric-api:fabric-resource-l0.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf95oader-v0:${project.fabric_resource_loader_v0_version}"
+	include "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
+
+	modCompile "net.fabricmc.fabric-api:fabric-registry-sync-v0:${project.fabric_registry_sync_v0_version}"
 
 	// javax.annotation.Nullable/Nonnull
 	compileOnly "com.google.code.findbugs:jsr305:3.0.1"

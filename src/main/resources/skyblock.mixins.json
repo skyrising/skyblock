@@ -3,6 +3,8 @@
   "package": "skyblock.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CrashReport_noopMixin",
+    "RegistrySyncManagerMixin",
     "BrewingRecipeRegistryAccessor",
     "BrewingRecipeRegistryMixin",
     "ChunkStatusMixin",
