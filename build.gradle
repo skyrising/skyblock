@@ -15,16 +15,20 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 def buildDate = new Date()
-if (project.mod_version.endsWith('-dev')) {
+def branch = gitBranch()
+def ci = System.getenv("CI") != null
+def isDev = project.mod_version.endsWith('-dev')
+
+if (isDev && !ci) {
 	def df = new SimpleDateFormat(".yyyyMMdd.HHmmss")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 	project.mod_version += df.format(buildDate)
 }
-
-
-def branch = gitBranch()
-if (branch != "master") {
-	project.mod_version += "+" + branch;
+if (branch != "master" && branch != "HEAD") {
+	project.mod_version += "+" + branch.replaceAll("[+-]", '_')
+}
+if (isDev && ci) {
+	project.mod_version += "+" + gitCommit().substring(0, 7)
 }
 
 archivesBaseName = project.name
@@ -42,13 +46,15 @@ dependencies {
 	modCompile "carpet:fabric-carpet:${project.minecraft_version}-${project.carpet_core_version}"
 
 	modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
-	include "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
+	include "net.fabricmc.fabric-api:fabric-resource-l0.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf950.3.1+facf3bbf95oader-v0:${project.fabric_resource_loader_v0_version}"
 
 	// javax.annotation.Nullable/Nonnull
 	compileOnly "com.google.code.findbugs:jsr305:3.0.1"
 }
 
 static def gitCommit() {
+	def githubCommit = System.getenv("GITHUB_SHA")
+	if (githubCommit != null) return githubCommit
 	def commit = ""
 	def proc = "git rev-parse HEAD".execute()
 	proc.in.eachLine { line -> commit = line }
@@ -58,6 +64,8 @@ static def gitCommit() {
 }
 
 static def gitBranch() {
+	def githubBranch = System.getenv("GITHUB_REF")
+	if (githubBranch != null) return githubBranch.substring(githubBranch.lastIndexOf('/') + 1)
 	def branch = ""
 	def proc = "git rev-parse --abbrev-ref HEAD".execute()
 	proc.in.eachLine { line -> branch = line }

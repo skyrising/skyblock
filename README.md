@@ -15,12 +15,4 @@ SkyBlock is a module for [fabric-carpet](https://github.com/gnembon/fabric-carpe
 - Place fabric-carpet and SkyBlock into `<minecraft-directory>/mods/`
 
 ## Usage (World Generation)
-### Singleplayer
-- `Create New World`
-- `More World Options...`
-- Choose `World Type: SkyBlock`
-
-### Multiplayer
-- Open `server.properties`
-- Change `level-type=default` to `level-type=skyblock`
-- Make sure to delete or move the world folder in order to create a new world
+Since version 3.0.0 the mod will always apply the SkyBlock world generation, regardless of which world type is selected.
