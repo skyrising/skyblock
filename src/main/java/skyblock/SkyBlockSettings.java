@@ -1,12 +1,12 @@
 package skyblock;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import quickcarpet.annotation.BugFix;
-import quickcarpet.settings.ChangeListener;
-import quickcarpet.settings.ParsedRule;
-import quickcarpet.settings.Rule;
+import quickcarpet.api.annotation.BugFix;
+import quickcarpet.api.settings.ChangeListener;
+import quickcarpet.api.settings.ParsedRule;
+import quickcarpet.api.settings.Rule;
 
-import static quickcarpet.settings.RuleCategory.*;
+import static quickcarpet.api.settings.RuleCategory.*;
 
 public class SkyBlockSettings {
     @Rule(category = {EXPERIMENTAL, FEATURE}, onChange = BetterPotionListener.class)

@@ -30,6 +30,7 @@ version = project.mod_version
 group = project.maven_group
 
 minecraft {
+	accessWidener "src/main/resources/skyblock.accesswidener"
 }
 
 repositories {
@@ -52,9 +53,8 @@ dependencies {
 	// javax.annotation.Nullable/Nonnull
 	compileOnly "com.google.code.findbugs:jsr305:3.0.1"
 
-	modImplementation("quickcarpet:quickcarpet:${project.quickcarpet_version}") {
-		exclude module: "modmenu"
-	}
+	modImplementation "net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_v0_version}"
+	modImplementation "quickcarpet:quickcarpet-api:${project.quickcarpet_api_version}"
 }
 
 static def gitCommit() {

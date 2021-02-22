@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.village.TradeOffers;
-import quickcarpet.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,7 @@ public class Trades {
     }
 
     private static TradeOffers.Factory sell(Item item, int price, int maxUses) {
-        return Reflection.newSellItemFactory(new ItemStack(item), price, 1, maxUses, 1, 0.05f);
+        return new TradeOffers.SellItemFactory(new ItemStack(item), price, 1, maxUses, 1, 0.05f);
     }
 
     public static Int2ObjectMap<TradeOffers.Factory[]> getSkyblockWanderingTraderOffers() {

@@ -2,7 +2,7 @@ package skyblock;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import quickcarpet.module.QuickCarpetModule;
+import quickcarpet.api.module.QuickCarpetModule;
 
 public class SkyBlockModule implements QuickCarpetModule {
     @Override

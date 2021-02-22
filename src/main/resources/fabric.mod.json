@@ -25,6 +25,6 @@
   ],
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "quickcarpet": "*"
+    "quickcarpet-api": "^1.0.0"
   }
 }

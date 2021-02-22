@@ -1,8 +1,8 @@
 package skyblock;
 
 import net.minecraft.recipe.BrewingRecipeRegistry;
-import quickcarpet.settings.ChangeListener;
-import quickcarpet.settings.ParsedRule;
+import quickcarpet.api.settings.ChangeListener;
+import quickcarpet.api.settings.ParsedRule;
 import skyblock.mixin.BrewingRecipeRegistryAccessor;
 
 public class BetterPotionListener implements ChangeListener<Boolean>
