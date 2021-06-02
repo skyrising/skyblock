@@ -3,8 +3,8 @@ package skyblock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.EndPortalFrameBlock;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.structure.StrongholdGenerator;
 import net.minecraft.structure.StructurePiece;
@@ -41,7 +41,7 @@ public class SkyBlockUtils {
         ((ProtoChunkAccessor) chunk).getLightSources().clear();
         long[] emptyHeightmap = new PackedIntegerArray(9, 256).getStorage();
         for (Map.Entry<Heightmap.Type, Heightmap> heightmapEntry : chunk.getHeightmaps()) {
-            heightmapEntry.getValue().setTo(emptyHeightmap);
+            heightmapEntry.getValue().setTo(chunk, heightmapEntry.getKey(), emptyHeightmap);
         }
         processStronghold(chunk, world);
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
@@ -53,7 +53,7 @@ public class SkyBlockUtils {
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
             StructureStart<?> stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
             ChunkPos pos = chunk.getPos();
-            if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
+            if (stronghold != null && stronghold.setBoundingBoxFromChildren().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
                 for (StructurePiece piece : stronghold.getChildren()) {
                     if (piece instanceof StrongholdGenerator.PortalRoom) {
                         if (piece.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
@@ -89,13 +89,13 @@ public class SkyBlockUtils {
         }
     }
 
-    private static void setBlockEntityInChunk(ProtoChunk chunk, BlockPos pos, CompoundTag tag) {
+    private static void setBlockEntityInChunk(ProtoChunk chunk, BlockPos pos, NbtCompound tag) {
         if (chunk.getPos().equals(new ChunkPos(pos))) {
             tag.putInt("x", pos.getX());
             tag.putInt("y", pos.getY());
             tag.putInt("z", pos.getZ());
             System.out.println(tag);
-            chunk.addPendingBlockEntityTag(tag);
+            chunk.addPendingBlockEntityNbt(tag);
         }
     }
 
@@ -137,13 +137,13 @@ public class SkyBlockUtils {
         }
         BlockPos spawnerPos = getBlockInStructurePiece(room, 5, 3, 6);
         setBlockInChunk(chunk, spawnerPos, Blocks.SPAWNER.getDefaultState());
-        CompoundTag spawnerTag = new CompoundTag();
+        NbtCompound spawnerTag = new NbtCompound();
         spawnerTag.putString("id", "minecraft:mob_spawner");
-        ListTag spawnPotentials = new ListTag();
+        NbtList spawnPotentials = new NbtList();
         spawnerTag.put("SpawnPotentials", spawnPotentials);
-        CompoundTag spawnEntry = new CompoundTag();
-        spawnPotentials.addTag(0, spawnEntry);
-        CompoundTag entity = new CompoundTag();
+        NbtCompound spawnEntry = new NbtCompound();
+        spawnPotentials.add(0, spawnEntry);
+        NbtCompound entity = new NbtCompound();
         spawnEntry.put("Entity", entity);
         entity.putString("id", "minecraft:silverfish");
         spawnEntry.putInt("Weight", 1);
@@ -156,7 +156,7 @@ public class SkyBlockUtils {
         // erase entities
         chunk.getEntities().clear();
         try {
-            ((ServerLightingProvider)chunk.getLightingProvider()).light(chunk, true).get();
+            ((ServerLightingProvider)world.getChunkManager().getLightingProvider()).light(chunk, true).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

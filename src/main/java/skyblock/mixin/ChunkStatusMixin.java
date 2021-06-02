@@ -18,19 +18,20 @@ import skyblock.SkyBlockUtils;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.Function;
 
 @Mixin(ChunkStatus.class)
 public class ChunkStatusMixin {
     // LIGHT
     @Inject(method = "method_20613", at = @At("HEAD"))
-    private static void onLighting(ChunkStatus chunkStatus, ServerWorld world, ChunkGenerator generator, StructureManager manager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> function, List<Chunk> list, Chunk chunk, CallbackInfoReturnable<CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> info) {
+    private static void onLighting(ChunkStatus chunkStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager manager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> function, List<Chunk> list, Chunk chunk, CallbackInfoReturnable<CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> info) {
         if(!chunk.getStatus().isAtLeast(chunkStatus)) SkyBlockUtils.deleteBlocks((ProtoChunk) chunk, world);
     }
 
     // SPAWN -> populateEntities
     @Inject(method = "method_16566", at = @At("RETURN"))
-    private static void afterPopulation(ServerWorld world, ChunkGenerator generator, List<Chunk> list, Chunk chunk, CallbackInfo info) {
+    private static void afterPopulation(ChunkStatus chunkStatus, ServerWorld world, ChunkGenerator generator, List<Chunk> list, Chunk chunk, CallbackInfo info) {
         ((ProtoChunk) chunk).getEntities().clear();
     }
 }
