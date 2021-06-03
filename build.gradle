@@ -8,21 +8,16 @@ sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
 def buildDate = new Date()
-def branch = gitBranch()
-def ci = System.getenv("CI") != null
-def isDev = project.mod_version.endsWith('-dev')
+def branch = GitHelper.getBranch(rootDir)
+def ver = GitHelper.getVersion(rootDir, project.mod_version)
 
-if (isDev && !ci) {
-	def df = new SimpleDateFormat(".yyyyMMdd.HHmmss")
-	df.setTimeZone(TimeZone.getTimeZone("UTC"))
-	project.mod_version += df.format(buildDate)
+if (branch != "master" && branch != "HEAD" && ver.pre.size() >= 2) {
+	ver.pre.add(0, branch.replaceAll("[+-]", '_'))
 }
-if (branch != "master" && branch != "HEAD") {
-	project.mod_version += "+" + branch.replaceAll("[+-]", '_')
-}
-if (isDev && ci) {
-	project.mod_version += "+" + gitCommit().substring(0, 7)
-}
+
+println ver
+
+version = ver.toString()
 
 archivesBaseName = project.name
 version = project.mod_version
@@ -56,45 +51,15 @@ dependencies {
 	modCompileOnly "quickcarpet:quickcarpet-api:${project.quickcarpet_api_version}"
 }
 
-static def gitCommit() {
-	def githubCommit = System.getenv("GITHUB_SHA")
-	if (githubCommit != null) return githubCommit
-	def commit = ""
-	def proc = "git rev-parse HEAD".execute()
-	proc.in.eachLine { line -> commit = line }
-	proc.err.eachLine { line -> println line }
-	proc.waitFor()
-	commit
-}
-
-static def gitBranch() {
-	def githubBranch = System.getenv("GITHUB_REF")
-	if (githubBranch != null) return githubBranch.substring(githubBranch.lastIndexOf('/') + 1)
-	def branch = ""
-	def proc = "git rev-parse --abbrev-ref HEAD".execute()
-	proc.in.eachLine { line -> branch = line }
-	proc.err.eachLine { line -> println line }
-	proc.waitFor()
-	branch
-}
-
-static def gitStatus() {
-	def exitCode = "git diff --quiet".execute().waitFor() // not added
-	if (exitCode == 0) {
-		exitCode = "git diff --cached --quiet".execute().waitFor() // not committed
-	}
-	exitCode == 0
-}
-
 task generateJava(type: Copy) {
 	def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
 	df.setTimeZone(TimeZone.getTimeZone("UTC"))
 	def templateContext = [
 			version: project.version,
 			timestamp: df.format(buildDate),
-			branch: gitBranch(),
-			commit: gitCommit(),
-			working_dir_clean: gitStatus(),
+			branch: GitHelper.getBranch(rootDir),
+			commit: GitHelper.getCommit(rootDir),
+			working_dir_clean: GitHelper.getStatus(rootDir),
 			minecraft_version: project.minecraft_version,
 			yarn_mappings: project.yarn_mappings
 	]
@@ -108,7 +73,10 @@ sourceSets.main.java.srcDir "$buildDir/generated/java"
 compileJava.dependsOn generateJava
 
 processResources {
-	inputs.property "version", project.version
+	def properties = [
+		version: rootProject.version,
+	]
+	inputs.properties properties
 
 	filesMatching("fabric.mod.json") {
 		expand properties
