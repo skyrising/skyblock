@@ -20,7 +20,6 @@ println ver
 version = ver.toString()
 
 archivesBaseName = project.name
-version = project.mod_version
 group = project.maven_group
 
 minecraft {
