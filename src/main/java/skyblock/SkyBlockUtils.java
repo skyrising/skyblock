@@ -94,7 +94,6 @@ public class SkyBlockUtils {
             tag.putInt("x", pos.getX());
             tag.putInt("y", pos.getY());
             tag.putInt("z", pos.getZ());
-            System.out.println(tag);
             chunk.addPendingBlockEntityNbt(tag);
         }
     }
