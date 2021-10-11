@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
+	id 'fabric-loom' version '0.9-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -22,8 +22,8 @@ version = ver.toString()
 archivesBaseName = project.name
 group = project.maven_group
 
-minecraft {
-	accessWidener "src/main/resources/skyblock.accesswidener"
+loom {
+	accessWidenerPath = file("src/main/resources/skyblock.accesswidener")
 }
 
 repositories {
