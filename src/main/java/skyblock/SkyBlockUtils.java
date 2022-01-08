@@ -1,8 +1,9 @@
 package skyblock;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.EndPortalFrameBlock;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.MobSpawnerBlockEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerLightingProvider;
@@ -15,8 +16,11 @@ import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
@@ -33,13 +37,17 @@ import java.util.concurrent.ExecutionException;
 
 public class SkyBlockUtils {
     public static void deleteBlocks(ProtoChunk chunk, WorldAccess world) {
+        Registry<Biome> biomes = world.getRegistryManager().get(Registry.BIOME_KEY);
         ChunkSection[] sections = chunk.getSectionArray();
-        Arrays.fill(sections, WorldChunk.EMPTY_SECTION);
+        for (int i = 0; i < sections.length; i++) {
+            sections[i] = new ChunkSection(world.sectionIndexToCoord(i), biomes);
+        }
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
             chunk.removeBlockEntity(bePos);
         }
         ((ProtoChunkAccessor) chunk).getLightSources().clear();
-        long[] emptyHeightmap = new PackedIntegerArray(9, 256).getStorage();
+        int bits = MathHelper.ceilLog2(chunk.getHeight() + 1);
+        long[] emptyHeightmap = new PackedIntegerArray(bits, 256).getData();
         for (Map.Entry<Heightmap.Type, Heightmap> heightmapEntry : chunk.getHeightmaps()) {
             heightmapEntry.getValue().setTo(chunk, heightmapEntry.getKey(), emptyHeightmap);
         }
@@ -53,7 +61,7 @@ public class SkyBlockUtils {
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
             StructureStart<?> stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
             ChunkPos pos = chunk.getPos();
-            if (stronghold != null && stronghold.setBoundingBoxFromChildren().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
+            if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
                 for (StructurePiece piece : stronghold.getChildren()) {
                     if (piece instanceof StrongholdGenerator.PortalRoom) {
                         if (piece.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
@@ -135,19 +143,13 @@ public class SkyBlockUtils {
             setBlockInStructure(room, chunk, portal, 6, 3, 11);
         }
         BlockPos spawnerPos = getBlockInStructurePiece(room, 5, 3, 6);
-        setBlockInChunk(chunk, spawnerPos, Blocks.SPAWNER.getDefaultState());
-        NbtCompound spawnerTag = new NbtCompound();
-        spawnerTag.putString("id", "minecraft:mob_spawner");
-        NbtList spawnPotentials = new NbtList();
-        spawnerTag.put("SpawnPotentials", spawnPotentials);
-        NbtCompound spawnEntry = new NbtCompound();
-        spawnPotentials.add(0, spawnEntry);
-        NbtCompound entity = new NbtCompound();
-        spawnEntry.put("Entity", entity);
-        entity.putString("id", "minecraft:silverfish");
-        spawnEntry.putInt("Weight", 1);
-        spawnerTag.put("SpawnData", entity.copy());
-        setBlockEntityInChunk(chunk, spawnerPos, spawnerTag);
+        BlockState spawnerState = Blocks.SPAWNER.getDefaultState();
+        setBlockInChunk(chunk, spawnerPos, spawnerState);
+        BlockEntity blockEntity = ((BlockEntityProvider) spawnerState.getBlock()).createBlockEntity(spawnerPos, spawnerState);
+        if (blockEntity instanceof MobSpawnerBlockEntity) {
+            ((MobSpawnerBlockEntity)blockEntity).getLogic().setEntityId(EntityType.SILVERFISH);
+        }
+        chunk.setBlockEntity(blockEntity);
     }
 
     private static void clearChunk(ProtoChunk chunk, WorldAccess world) {

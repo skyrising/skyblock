@@ -31,20 +31,19 @@ public abstract class DaylightDetectorBlockEntityMixin extends BlockEntity imple
     }
 
     @Override
-    public void readNbt(NbtCompound compoundTag_1) {
-        super.readNbt(compoundTag_1);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
 
-        if (SkyBlockSettings.blockLightDetector && compoundTag_1.contains("blockLightMode", 99 /* NUMBER */)) {
-            this.detectsBlockLight = compoundTag_1.getInt("blockLightMode") > 0;
+        if (SkyBlockSettings.blockLightDetector && nbt.contains("blockLightMode", 99 /* NUMBER */)) {
+            this.detectsBlockLight = nbt.getInt("blockLightMode") > 0;
         }
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound compoundTag_1) {
-        compoundTag_1 = super.writeNbt(compoundTag_1);
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
         if (SkyBlockSettings.blockLightDetector) {
-            compoundTag_1.putInt("blockLightMode", this.detectsBlockLight ? 1 : 0);
+            nbt.putInt("blockLightMode", this.detectsBlockLight ? 1 : 0);
         }
-        return compoundTag_1;
     }
 }
