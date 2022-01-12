@@ -23,6 +23,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.chunk.PalettedContainer;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.gen.feature.StructureFeature;
@@ -37,10 +38,10 @@ import java.util.concurrent.ExecutionException;
 
 public class SkyBlockUtils {
     public static void deleteBlocks(ProtoChunk chunk, WorldAccess world) {
-        Registry<Biome> biomes = world.getRegistryManager().get(Registry.BIOME_KEY);
         ChunkSection[] sections = chunk.getSectionArray();
         for (int i = 0; i < sections.length; i++) {
-            sections[i] = new ChunkSection(world.sectionIndexToCoord(i), biomes);
+            PalettedContainer<BlockState> emptyBlockSection = new PalettedContainer<>(Block.STATE_IDS, Blocks.AIR.getDefaultState(), PalettedContainer.PaletteProvider.BLOCK_STATE);
+            sections[i] = new ChunkSection(sections[i].getYOffset(), emptyBlockSection, sections[i].getBiomeContainer());
         }
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
             chunk.removeBlockEntity(bePos);
