@@ -41,7 +41,7 @@ public class SkyBlockUtils {
         ChunkSection[] sections = chunk.getSectionArray();
         for (int i = 0; i < sections.length; i++) {
             PalettedContainer<BlockState> emptyBlockSection = new PalettedContainer<>(Block.STATE_IDS, Blocks.AIR.getDefaultState(), PalettedContainer.PaletteProvider.BLOCK_STATE);
-            sections[i] = new ChunkSection(sections[i].getYOffset(), emptyBlockSection, sections[i].getBiomeContainer());
+            sections[i] = new ChunkSection(world.sectionIndexToCoord(i), emptyBlockSection, sections[i].getBiomeContainer());
         }
         for (BlockPos bePos : chunk.getBlockEntityPositions()) {
             chunk.removeBlockEntity(bePos);
