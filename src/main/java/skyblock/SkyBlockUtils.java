@@ -4,9 +4,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.structure.StrongholdGenerator;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructureStart;
@@ -20,21 +17,17 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.PalettedContainer;
 import net.minecraft.world.chunk.ProtoChunk;
-import net.minecraft.world.chunk.WorldChunk;
-import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.ConfiguredStructureFeatures;
 import skyblock.mixin.ProtoChunkAccessor;
 import skyblock.mixin.StructurePieceAccessor;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 public class SkyBlockUtils {
     public static void deleteBlocks(ProtoChunk chunk, WorldAccess world) {
@@ -57,10 +50,12 @@ public class SkyBlockUtils {
     }
 
     private static void processStronghold(ProtoChunk chunk, WorldAccess world) {
-        for (long startPosLong : chunk.getStructureReferences(StructureFeature.STRONGHOLD)) {
+        var registry = world.getRegistryManager().get(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY);
+        var strongholdFeature = registry.get(ConfiguredStructureFeatures.STRONGHOLD.getKey().orElseThrow());
+        for (long startPosLong : chunk.getStructureReferences(strongholdFeature)) {
             ChunkPos startPos = new ChunkPos(startPosLong);
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
-            StructureStart<?> stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
+            StructureStart stronghold = startChunk.getStructureStart(strongholdFeature);
             ChunkPos pos = chunk.getPos();
             if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ())) {
                 for (StructurePiece piece : stronghold.getChildren()) {
@@ -95,15 +90,6 @@ public class SkyBlockUtils {
     private static void setBlockInChunk(ProtoChunk chunk, BlockPos pos, BlockState state) {
         if (chunk.getPos().equals(new ChunkPos(pos))) {
             chunk.setBlockState(pos, state, false);
-        }
-    }
-
-    private static void setBlockEntityInChunk(ProtoChunk chunk, BlockPos pos, NbtCompound tag) {
-        if (chunk.getPos().equals(new ChunkPos(pos))) {
-            tag.putInt("x", pos.getX());
-            tag.putInt("y", pos.getY());
-            tag.putInt("z", pos.getZ());
-            chunk.addPendingBlockEntityNbt(tag);
         }
     }
 
@@ -151,16 +137,5 @@ public class SkyBlockUtils {
             ((MobSpawnerBlockEntity)blockEntity).getLogic().setEntityId(EntityType.SILVERFISH);
         }
         chunk.setBlockEntity(blockEntity);
-    }
-
-    private static void clearChunk(ProtoChunk chunk, WorldAccess world) {
-        deleteBlocks(chunk, world);
-        // erase entities
-        chunk.getEntities().clear();
-        try {
-            ((ServerLightingProvider)world.getChunkManager().getLightingProvider()).light(chunk, true).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
     }
 }
