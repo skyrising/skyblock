@@ -26,6 +26,6 @@
   "accessWidener": "skyblock.accesswidener",
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "quickcarpet-api": "^1.0.0"
+    "quickcarpet-api": ["^1.0.0", "^2.0.0"]
   }
 }
